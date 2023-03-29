@@ -7,29 +7,32 @@ public class Kommunikation {
     private String ser_port;
     private SerialPort port;
 
-
-    public void setVerbingung(){
-        this.port = SerialPort.getCommPorts()[1];
-        this.port.openPort();
+    Kommunikation(){
+        //setVerbingung();
     }
 
 
-    public void ports(){
+    public SerialPort setVerbingung(SerialPort port){
+        this.port = port;
+        System.out.println(this.port);
+        this.port.openPort();
+        return this.port;
+    }
+
+
+    public SerialPort[] ports(){
         SerialPort[] Port;
         Port = SerialPort.getCommPorts();
 
-        for (SerialPort p : Port) {
-            System.out.println(p);
-        }
-        ;
+        return Port;
 
 
     }
 
 
-    public void writter(String b) {
-        b += ";";
-        this.port.writeBytes(b.getBytes(),b.length());
+    public void writter(String b,SerialPort p) {
+
+        p.writeBytes(b.getBytes(),b.length());
 
     }
 }
