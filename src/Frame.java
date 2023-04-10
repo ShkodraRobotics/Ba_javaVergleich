@@ -14,8 +14,8 @@ public class Frame {
     private SerialPort port;
     Frame() {
 
-         this.frame = new JFrame();
-        frame.setVisible(true);
+        this.frame = new JFrame();
+
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(500, 500);
         frame.setTitle("Roboter-Controller");
@@ -35,7 +35,7 @@ public class Frame {
 
         public void widget() {
             JPanel panel1 = new JPanel();
-            frame.add(panel1);
+            //frame.add(panel1);
             //____________________________________________________________________
             JSlider base_slide = new JSlider(0, 180);
             base_slide.addChangeListener(new ChangeListener() {
@@ -131,12 +131,31 @@ public class Frame {
 
             panel1.add(Con);
 
-            panel1.revalidate();
+
+
+            JPanel Controller = new JPanel();
+            JPanel Bild  = new JPanel();
+            JTabbedPane Menu = new JTabbedPane(JTabbedPane.TOP,JTabbedPane.SCROLL_TAB_LAYOUT );
+            Menu.addTab("panel1",panel1);
+            Menu.addTab("Controller",Controller);
+            Menu.addTab("Bild",Bild);
+
+
+            frame.add(Menu);
+            frame.setVisible(true);
+
+
+
+
+
+
+
+
+
+
+
 
         }
-
-
-
 
 
 
