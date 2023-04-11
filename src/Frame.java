@@ -6,12 +6,19 @@ import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Scanner;
 import javax.swing.border.Border;
 public class Frame {
     private final JFrame frame;
     private Kommunikation com;
     private SerialPort port;
+
+    private  Controller_Con Kontroller = null;
+    private Thread konThread;
+    private Thread stopThread = new Thread();
+    private boolean State = false;
+
     Frame() {
 
         this.frame = new JFrame();
@@ -135,36 +142,72 @@ public class Frame {
 
             JPanel Controller = new JPanel();
             JPanel Bild  = new JPanel();
+
             JTabbedPane Menu = new JTabbedPane(JTabbedPane.TOP,JTabbedPane.SCROLL_TAB_LAYOUT );
             Menu.addTab("panel1",panel1);
             Menu.addTab("Controller",Controller);
             Menu.addTab("Bild",Bild);
+            JButton conectioButton = new JButton("Kontrollerverbindung");
+            conectioButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    if(Kontroller == null) {
+                        Kontroller = new Controller_Con();
+                    }
+                    if(konThread == null){
+                        konThread = new Thread(() -> {
+                            while (!State) {
+                                ArrayList<String> a = Kontroller.controllerSteam();
+
+                                writer(a);
+
+                            }
+                        });
+                        konThread.setDaemon(true);
+                        konThread.start();
+                    }else {
+                        konThread = null;
+                        State = false;
+                        actionPerformed(e);
+
+
+                    }
+                }
+            });
+
+
+
+
+            JButton disconButton = new JButton("Kontroller trennen");
+
+            disconButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    State = true;
+
+                }
+            });
+
+            Controller.add(conectioButton);
+            Controller.add(disconButton);
+
+
+
+
+
 
 
             frame.add(Menu);
             frame.setVisible(true);
-
-
-
-
-
-
-
-
-
-
-
-
         }
 
+        public void writer(ArrayList<String> x){
 
+        for(int i= 0;i<x.size();i++){
+            com.writter(x.get(i),port);
+        }
 
-
-
-
-
-
-
+        }
 
 
 
